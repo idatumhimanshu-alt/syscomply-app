@@ -2,6 +2,7 @@ import express from 'express';
 import { config } from 'dotenv';
 import cors from 'cors';
 import bodyParser from "body-parser";
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import sequelize from "./config/db.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -60,6 +61,14 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/generalDocuments", generalDocumentsRoutes);
 app.use("/api/iteration", iterationRoutes);
 app.use("/api/department", departmentRoutes);
+
+// Proxy all non-API requests to the frontend (running on port 3000)
+app.use('/', createProxyMiddleware({
+  target: 'http://localhost:3000',
+  changeOrigin: true,
+  ws: true, // proxy websockets
+  logLevel: 'silent'
+}));
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,6 +1,6 @@
 /**
  * QMS Application Server Wrapper
- * This file runs the QMS backend within the Replit environment
+ * This file runs both the QMS backend and frontend within the Replit environment
  */
 
 import { spawn } from 'child_process';
@@ -11,43 +11,70 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const BACKEND_DIR = path.resolve(__dirname, '..', 'BackEnd');
+const FRONTEND_DIR = path.resolve(__dirname, '..', 'frontend-new');
 const BACKEND_SERVER = 'src/server.js';
 
-console.log('🏥 Starting QMS Application Backend...');
+console.log('🏥 Starting QMS Application...');
 console.log('📁 Backend directory:', BACKEND_DIR);
+console.log('📁 Frontend directory:', FRONTEND_DIR);
 
-// Run the QMS backend as a child process
-const backend = spawn('node', [BACKEND_SERVER], {
-  cwd: BACKEND_DIR,
+// Start the frontend Vite dev server
+console.log('🎨 Starting frontend on port 3000...');
+const frontend = spawn('npm', ['run', 'dev'], {
+  cwd: FRONTEND_DIR,
   stdio: 'inherit',
   shell: true,
   env: {
     ...process.env,
-    PORT: '5000',
+    PORT: '3000',
     NODE_ENV: process.env.NODE_ENV || 'development'
   }
 });
 
-backend.on('error', (err) => {
-  console.error('❌ Failed to start QMS backend:', err);
-  process.exit(1);
+frontend.on('error', (err) => {
+  console.error('❌ Failed to start frontend:', err);
 });
 
-backend.on('exit', (code, signal) => {
-  if (code !== 0) {
-    console.error(`❌ Backend exited with code ${code} and signal ${signal}`);
-    process.exit(code || 1);
-  }
-});
+// Give frontend a moment to start, then start backend
+setTimeout(() => {
+  console.log('🚀 Starting backend on port 5000...');
+  
+  // Run the QMS backend as a child process
+  const backend = spawn('node', [BACKEND_SERVER], {
+    cwd: BACKEND_DIR,
+    stdio: 'inherit',
+    shell: true,
+    env: {
+      ...process.env,
+      PORT: '5000',
+      NODE_ENV: process.env.NODE_ENV || 'development'
+    }
+  });
 
-// Handle shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down QMS backend...');
-  backend.kill('SIGINT');
-  process.exit(0);
-});
+  backend.on('error', (err) => {
+    console.error('❌ Failed to start QMS backend:', err);
+    process.exit(1);
+  });
 
-process.on('SIGTERM', () => {
-  backend.kill('SIGTERM');
-  process.exit(0);
-});
+  backend.on('exit', (code, signal) => {
+    if (code !== 0) {
+      console.error(`❌ Backend exited with code ${code} and signal ${signal}`);
+      frontend.kill();
+      process.exit(code || 1);
+    }
+  });
+
+  // Handle shutdown
+  process.on('SIGINT', () => {
+    console.log('\n🛑 Shutting down QMS application...');
+    backend.kill('SIGINT');
+    frontend.kill('SIGINT');
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', () => {
+    backend.kill('SIGTERM');
+    frontend.kill('SIGTERM');
+    process.exit(0);
+  });
+}, 2000);
