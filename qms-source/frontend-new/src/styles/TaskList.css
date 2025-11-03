@@ -1,0 +1,421 @@
+/* Task Container */
+.task-container {
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 95%;
+    margin: auto;
+    overflow-x: hidden;
+}
+
+/* Header */
+.task-container h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* Scrollable Table Container */
+.task-table {
+    margin-top: 20px;
+    border-radius: 8px;
+    max-width: 100%;
+    overflow-x: auto;
+    max-height: 70vh;
+    display: block;
+}
+
+/* Scrollable Table Container */
+.task-table {
+    margin-top: 20px;
+    border-radius: 8px;
+    width: 100%; /* Ensure full width */
+    max-height: 70vh;
+    overflow: auto; /* Enables both horizontal and vertical scrollbars */
+    display: block;
+}
+
+
+
+/* Sticky Header */
+.task-table thead {
+    position: sticky;
+    top: 0;
+    background: #007bff;
+    z-index: 2;
+}
+
+/* Table Headers */
+.task-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 14px;
+    min-width: 150px;  /* Ensures enough space */
+    max-width: 200px;  /* Prevents headers from getting too wide */
+    border: 1px solid #0056b3;
+    border-radius: 6px;
+    font-size: 15px;
+    white-space: normal; /* Allows multi-line text */
+    word-break: break-word; /* Ensures words don't split awkwardly */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Table Cells */
+.task-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Hover Effect */
+.task-table tbody tr:hover {
+    background: #f1f1f1;
+}
+
+/* Action Buttons */
+.task-table button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.task-table .delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.task-table .delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Scrollbar Customization */
+.task-table::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-table::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.task-table::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Dialog Styles */
+.MuiDialog-paper {
+    border-radius: 8px !important;
+    padding: 10px;
+}
+
+.MuiDialogTitle-root {
+    text-align: center;
+    font-weight: bold;
+}
+
+.MuiDialogActions-root {
+    justify-content: center;
+}
+
+/* Icon Buttons */
+.task-table .MuiIconButton-root {
+    padding: 5px;
+}
+
+.task-table .MuiSvgIcon-root {
+    font-size: 1.2rem;
+}
+
+.task-table .MuiIconButton-root:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Ensures column headers wrap correctly without splitting words */
+.header-cell {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    min-width: 150px;
+    max-width: 200px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Ensures dropdown filters match header style */
+.filter-dropdown {
+    background: white;
+    border-radius: 4px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .task-container {
+        padding: 15px;
+    }
+
+    .task-table {
+        max-height: 60vh;
+    }
+
+    .task-table table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .task-table th, .task-table td {
+        font-size: 14px;
+    }
+    
+    .cloud-upload-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .cloud-upload-btn:hover {
+        background-color: #0056b3;
+      }
+         
+/* File Upload Section (Same as Edit Task) */
+.file-upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px dashed #b3b3b3;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    width: 100%;
+  }
+  
+  /* File Input */
+  .custom-file-input {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .custom-file-input input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  
+  .custom-file-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #1976d2;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-file-button:hover {
+    background-color: #509ce7;
+  }
+  
+  /* File Name Display */
+  .file-name {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Button Group (Matches Edit Task) */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+  }
+  
+  .button-group button {
+    width: 48%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Primary Button (Upload) */
+  .MuiButton-containedPrimary {
+    background-color: #1976d2 !important;
+    color: white !important;
+    transition: 0.3s;
+  }
+  
+  .MuiButton-containedPrimary:hover {
+    background-color: #509ce7 !important;
+  }
+  
+  /* Secondary Button (Cancel) */
+  .MuiButton-outlinedSecondary {
+    color: #d32f2f !important;
+    border-color: #d32f2f !important;
+    transition: 0.3s;
+  }
+  
+  .MuiButton-outlinedSecondary:hover {
+    background-color: #f8d7da !important;
+    border-color: #d32f2f !important;
+  }
+  .task-table-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+  
+  .task-table {
+    min-width: 1200px; /* Ensure the table doesn’t shrink too much */
+  }
+  
+  .table-header-cell {
+    font-weight: bold;
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* Make the table more compact on small screens */
+  @media (max-width: 1024px) {
+    .task-table {
+      min-width: 100%;
+    }
+    .table-header-cell {
+      font-size: 14px;
+      padding: 8px;
+    }
+    .table-row td {
+      font-size: 12px;
+      padding: 6px;
+    }
+  }
+  
+  /* Hide less important columns on smaller screens */
+  @media (max-width: 768px) {
+    .task-table thead th:nth-child(2),
+    .task-table tbody td:nth-child(2),
+    .task-table thead th:nth-child(5),
+    .task-table tbody td:nth-child(5),
+    .task-table thead th:nth-child(7),
+    .task-table tbody td:nth-child(7) {
+      display: none;
+    }
+  }
+  .task-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: 500px; /* Set a fixed height for the table */
+    overflow: hidden; /* Prevent scrolling outside */
+  }
+  
+  .task-table {
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto; /* Enable vertical scrolling only for table */
+    display: block;
+  }
+  
+  .task-table thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+  }
+  
+  /* Ensure only the table body scrolls while the headers remain fixed */
+  .task-table tbody {
+    display: block;
+    max-height: 450px; /* Adjust based on your layout */
+    overflow-y: auto;
+    width: 100%;
+  }
+  
+  .task-table thead,
+  .task-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+/* Each log entry styled like a card */
+.task-log-entry {
+    margin-bottom: 20px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fdfdfd;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  }
+
+/* Style the top line with who changed what and when */
+.task-log-header {
+  font-weight: 600;
+  color: #2e3a59;
+  font-size: 15px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Grid layout for From and To */
+.task-log-table {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  row-gap: 8px;
+  column-gap: 16px;
+  width: 100%;
+}
+
+
+/* Label styling (From:, To:) */
+.task-log-label {
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Value cell */
+.task-log-table td {
+  font-size: 14px;
+  color: #333;
+  padding: 6px 0;
+}
+
+/* Empty values styled subtly */
+.task-log-empty {
+  font-style: italic;
+  color: #999;
+}
+
+.task-log-table tr {
+  margin-bottom: 6px;
+  display: contents; /* allows the grid structure to apply inside tr */
+}
+
+    
+}

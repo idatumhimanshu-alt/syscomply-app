@@ -1,0 +1,91 @@
+/* Role Form Container */
+.role-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form Heading */
+  .role-form-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Fields */
+  .role-form-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .role-form-container input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Buttons Container */
+  .role-form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Submit Button */
+  .submit-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  /* Cancel Button */
+  .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #b02a37;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .role-form-container {
+      padding: 15px;
+    }
+  
+    .role-form-container input {
+      padding: 10px;
+      font-size: 12px;
+    }
+  
+    .submit-btn, .cancel-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+  }
+  

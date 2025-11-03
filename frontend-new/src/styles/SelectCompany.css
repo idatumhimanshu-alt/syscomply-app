@@ -1,0 +1,59 @@
+.company-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .company-dropdown {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    outline: none;
+    background: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  .company-dropdown:hover {
+    border-color: #0056b3;
+  }
+  
+  .next-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .next-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .loading-text {
+    font-size: 16px;
+    color: #777;
+  }
+  

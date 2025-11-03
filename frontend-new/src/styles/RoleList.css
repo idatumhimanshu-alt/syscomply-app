@@ -1,0 +1,100 @@
+/* Role List Container */
+.role-list-container {
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+.role-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Table Header */
+.role-table th {
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Table Rows */
+.role-table td {
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Alternate Row Coloring */
+.role-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* Hover Effect */
+.role-table tr:hover {
+  background-color: #e9ecef;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Buttons Container */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* View Modules Button */
+.view-modules-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.view-modules-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Delete Button */
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+  background-color: #b02a37;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .role-table th, .role-table td {
+      padding: 10px;
+      font-size: 12px;
+  }
+
+  .view-modules-btn, .delete-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+  }
+}

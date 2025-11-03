@@ -1,0 +1,123 @@
+/* Module List Container */
+.module-list-container {
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+.module-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Table Header */
+.module-table th {
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Table Rows */
+.module-table td {
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Alternate Row Coloring */
+.module-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* Hover Effect */
+.module-table tr:hover {
+  background-color: #e9ecef;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Buttons Container */
+.module-action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Edit Button */
+.edit-module-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.edit-module-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Delete Button */
+.delete-module-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.delete-module-btn:hover {
+  background-color: #b02a37;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .module-table th, .module-table td {
+      padding: 10px;
+      font-size: 12px;
+  }
+
+  .edit-module-btn, .delete-module-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+  }
+}
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.add-module-btn {
+  background-color: #1e3a8a; /* Dark blue */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-module-btn:hover {
+  background-color: #172554; 
+}

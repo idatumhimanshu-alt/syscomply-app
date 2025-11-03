@@ -1,0 +1,283 @@
+
+
+/* .permissions-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h2, h3 {
+  color: #333;
+  margin-bottom: 15px;
+} */
+
+/* Common table styling for both pages */
+/* .permissions-table, .role-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+} */
+
+/* .permissions-table th, 
+.permissions-table td,
+.role-table th,
+.role-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+} */
+
+/* .permissions-table th,
+.role-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.permissions-table tr:hover,
+.role-table tr:hover {
+  background-color: #f1f1f1;
+} */
+
+/* Styling for checkboxes */
+/* input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+} */
+
+/* Save Button */
+/* .save-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.save-btn:hover {
+  background: #0b5ed7;
+} */
+
+/* Assign Button  */
+/* .assign-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #1d72b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.assign-button:hover {
+  background-color: #155a8a;
+} */
+
+/* Role Selection Section */
+/* .role-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+} */
+
+/* Styling for the Roles Table */
+/* .roles-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.roles-table th, 
+.roles-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.roles-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.roles-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+.assign-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #1d72b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.assign-button:hover {
+  background-color: #155a8a;
+} */
+
+
+.permissions-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h2, h3 {
+  color: #222;
+  margin-bottom: 15px;
+}
+
+/* Common table styling for both pages */
+.permissions-table, .role-table, .roles-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.permissions-table th, 
+.permissions-table td,
+.role-table th,
+.role-table td,
+.roles-table th,
+.roles-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.permissions-table th,
+.role-table th,
+.roles-table th {
+  background-color: #34495e;
+  color: white;
+  font-weight: bold;
+  padding: 14px;
+}
+
+.permissions-table tr:nth-child(even),
+.role-table tr:nth-child(even),
+.roles-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.permissions-table tr:hover,
+.role-table tr:hover,
+.roles-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Styling for checkboxes */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Save Button */
+.save-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s ease-in-out;
+}
+
+.save-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Assign Button */
+.assign-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #1d72b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.assign-button:hover {
+  background-color: #155a8a;
+  transform: scale(1.05);
+}
+
+/* Role Selection Section */
+.role-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+select {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .permissions-container {
+    width: 95%;
+  }
+
+  .permissions-table th, 
+  .role-table th, 
+  .roles-table th,
+  .permissions-table td,
+  .role-table td,
+  .roles-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .assign-button, .save-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
