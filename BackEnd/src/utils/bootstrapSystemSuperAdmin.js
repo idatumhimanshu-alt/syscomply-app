@@ -61,7 +61,7 @@ const existingModules = await Module.findAll();
 
 if (existingModules.length === 0) {
     await sequelize.query(`
-        INSERT INTO Module (id, name, description, createdAt, updatedAt) VALUES 
+        INSERT INTO "Module" (id, name, description, "createdAt", "updatedAt") VALUES 
         ('1f0f190d-3a83-421c-af98-5d081100230e','Task','This is Task Module','2025-02-24 17:06:52','2025-02-24 17:06:52'),
         ('2566950b-1718-4440-8b8d-d5ec94624d0f','TaskChangeLog','This is TaskChangeLog Module','2025-02-24 17:37:38','2025-02-24 17:37:38'),
         ('2f06d3b2-9121-4a2b-a5fe-7f1e4aae7270','Permissions','This is Permissions Module','2025-02-24 17:29:25','2025-02-24 17:29:25'),
