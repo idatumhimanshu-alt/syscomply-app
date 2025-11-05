@@ -8,6 +8,61 @@ SysComply is a web-based, multi-tenant compliance management platform designed t
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Fixes & Deployment Status
+
+**Deployment Status**: ✅ Successfully deployed and running on Replit (November 2025)
+
+**Default Credentials**:
+- Email: `admin@idatum.com`
+- Password: `Admin@123`
+- Company: IDATUM
+- Role: QMS Super Admin
+
+**Recent Fixes (November 5, 2025)**:
+
+✅ **Password Hashing Security Fix**
+- **Issue**: Passwords were being stored in plaintext during company onboarding and manual user creation
+- **Fix**: Added `bcrypt.hash(generatedPassword, 10)` before storing password_hash in both companyController and userController
+- **Impact**: All new users (Company Admin accounts and manually created users) now have properly hashed passwords
+- **Files Changed**: `BackEnd/src/controllers/companyController.js`, `BackEnd/src/controllers/userController.js`
+- **Testing**: Email system delivers plaintext password to user, but database stores bcrypt hash (salt rounds: 10)
+
+✅ **Module Initialization Fix**
+- Bootstrap script now ensures modules and permissions exist even when company already initialized
+- QMS Super Admin role can access all 11 core modules without manual SQL intervention
+- Login flow works correctly without 403 errors
+
+✅ **Company Soft Delete Bug Fix**
+- Changed all Company.findByPk() calls to Company.findOne() with explicit is_active: true filter
+- Affected functions: getCompanyDetails (list & single), updateCompanyDetails
+- Soft-deleted companies now correctly hidden from all retrieval endpoints
+- Note: Company model has defaultScope filtering by is_active, but findByPk bypasses it in Sequelize
+
+✅ **Email System Configuration**
+- Gmail integration via Google App Password (stored in EMAIL_PASS secret)
+- Successfully sends Company Admin credentials during onboarding
+- Important: Google App Password must be entered WITHOUT spaces (16 continuous characters)
+
+## Critical Operational Notes
+
+**Iteration Single-Use Constraint**:
+- Each Iteration can only be used ONCE for uploading compliance tasks
+- After an iteration is used, a new one must be created for additional task batches
+- This must be clearly communicated to clients to avoid workflow errors
+
+**Onboarding Handoff Process**:
+1. QMS Super Admin logs in to SysComply
+2. Uses "Organization Onboarding" module to create new company profile
+3. System generates unique Company Admin account with auto-generated password
+4. Credentials securely delivered to client via email
+5. Handoff complete - QMS Super Admin direct involvement ends
+6. Company Admin independently manages their compliance program
+
+**Data Isolation Guarantee**:
+- QMS Super Admin can onboard/offboard companies but CANNOT access client data
+- No visibility into client tasks, documents, or compliance activities
+- True multi-tenant architecture with strict company_id isolation
+
 ## System Architecture
 
 ### Application Structure
