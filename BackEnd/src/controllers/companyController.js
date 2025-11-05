@@ -131,7 +131,12 @@ const updateCompanyDetails = async (req, res) => {
         const { name, industry, domain } = req.body;
         const { id } = req.params;
 
-        const company = await Company.findByPk(id);
+        const company = await Company.findOne({
+            where: {
+                id,
+                is_active: true
+            }
+        });
         if (!company) return res.status(404).json({ error: "Company not found" });
 
         // Update only provided fields
@@ -154,14 +159,20 @@ const getCompanyDetails = async (req, res) => {
     try {
         let company;
         if (req.params.id) {
-            company = await Company.findByPk(req.params.id);
+            company = await Company.findOne({
+                where: {
+                    id: req.params.id,
+                    is_active: true
+                }
+            });
             if (!company) return res.status(404).json({ error: 'Company not found' });
         } else {
             company = await Company.findAll({
                 where: {
-                    name: { [Op.ne]: defaultCompany } // Exclude 'Bonaventure'
+                    is_active: true,
+                    name: { [Op.ne]: defaultCompany }
                 },
-                order: [['name', 'ASC']] // Sort by name alphabetically
+                order: [['name', 'ASC']]
             });
         }
         
