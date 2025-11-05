@@ -81,7 +81,7 @@ sequelize
   })
   .catch((err) => console.error("Error syncing database:", err));
 
-// Start server
-server.listen(PORT, () => {
+// Start server - bind to 0.0.0.0 for Replit compatibility
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
