@@ -10,6 +10,40 @@ The system uses a monorepo-like structure with separate backend and frontend app
 
 Preferred communication style: Simple, everyday language.
 
+## Replit Deployment
+
+**Status**: ✅ Successfully deployed and running on Replit (November 2025)
+
+**Changes Made for Replit Compatibility**:
+1. **Database Migration**: Migrated from MySQL to PostgreSQL (Neon-backed)
+   - All Sequelize models updated for PostgreSQL compatibility
+   - Connection via `DATABASE_URL` environment variable
+
+2. **MUI Version Fix**: Downgraded Material UI from v7.3.4 to v6.4.4
+   - Frontend code uses Grid2 component only available in MUI v6
+   - Installed: `@mui/material@6.4.4`, `@mui/icons-material@6.4.4`
+   - Data Grid: `@mui/x-data-grid@7.23.2`
+
+3. **Dependency Management**: 
+   - Created symlink: `frontend-new/node_modules` → `../node_modules`
+   - Frontend dependencies installed in root node_modules
+   - Both frontend and backend share the same dependency tree
+
+4. **Application Wrapper**: Created `server/index.ts`
+   - Orchestrates startup of both backend and frontend
+   - Frontend (Vite) runs on port 3000
+   - Backend (Express) runs on port 5000
+   - Started via: `npm run dev` (runs `tsx server/index.ts`)
+
+**Default Credentials**:
+- Email: `admin@idatum.com`
+- Password: `Admin@123`
+- Company: IDATUM
+
+**Known Issues**:
+- React prop warnings in console (pre-existing, not deployment-related)
+- Some 403 permission errors for role/company endpoints (pre-existing module permission configuration)
+
 ## System Architecture
 
 ### Application Structure
