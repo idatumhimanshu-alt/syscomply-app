@@ -39,7 +39,7 @@ export default function LoginPage({ background = "default" }) {
 
     try {
       // Authenticate user and get token
-      const response = await axiosInstance.post("http://localhost:5000/api/auth/login", {
+      const response = await axiosInstance.post("/auth/login", {
         email,
         password,
       });
@@ -77,10 +77,13 @@ export default function LoginPage({ background = "default" }) {
         try {
           // Fetch user role using token and roleModuleId
           const roleModuleId = "971a88b8-461e-4cd2-9a06-fce42ad6b806"; // Role module ID
-          const roleResponse = await axiosInstance.get(`/roles/${roleModuleId}/${roleId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-            params: { company_id: company_id }
-          });
+          const roleResponse = await axiosInstance.get(
+            `/roles/${roleModuleId}/${roleId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+              params: { company_id: company_id },
+            },
+          );
 
           roleName = roleResponse.data.name; // Using name instead of roleName to match API response
           localStorage.setItem("userRole", roleName);
@@ -122,7 +125,7 @@ export default function LoginPage({ background = "default" }) {
 
     setForgotLoading(true);
     try {
-      const res = await axiosInstance.post("http://localhost:5000/api/auth/forgotPassword", {
+      const res = await axiosInstance.post("/auth/forgotPassword", {
         email: forgotEmail,
       });
 
