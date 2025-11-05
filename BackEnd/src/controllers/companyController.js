@@ -64,6 +64,7 @@ export const createCompany = async (req, res) => {
         const role_id = superAdminRole.id;
 
         const generatedPassword = generateRandomPassword();
+        const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
         console.log("Attempting to create User with:", {
             email, adminName, companyId, role_id, generatedPassword
@@ -74,7 +75,7 @@ export const createCompany = async (req, res) => {
             name: adminName,
             company_id: companyId,
             role_id,
-            password_hash: generatedPassword
+            password_hash: hashedPassword
         }, { transaction });
 
         console.log("✅ User successfully created:", newUser);

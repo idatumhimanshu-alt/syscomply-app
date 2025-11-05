@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import Company from '../models/Company.js';
 import Role from '../models/Role.js';
+import bcrypt from 'bcryptjs';
 import generateRandomPassword from '../utils/generateRandomPassword.js';
 import sendEmail from '../utils/sendEmail.js';
 import { Sequelize } from 'sequelize';
@@ -28,6 +29,7 @@ const createUser = async (req, res) => {
 
         // Generate a unique random password
         const generatedPassword = generateRandomPassword();
+        const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
         console.log(`Generated Password: ${generatedPassword}`);
 
@@ -37,7 +39,7 @@ const createUser = async (req, res) => {
             company_id, 
             role_id, 
             department_id,
-            password_hash: generatedPassword,
+            password_hash: hashedPassword,
             reportTo
         });
 
