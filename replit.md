@@ -46,6 +46,12 @@ Preferred communication style: Simple, everyday language.
   - System Super Admin role can now access all 11 core modules without manual SQL intervention
   - Login flow works correctly without 403 errors
 
+- ✅ **Company Soft Delete Bug**: Fixed company retrieval to properly respect soft-delete flag
+  - Changed all Company.findByPk() calls to Company.findOne() with explicit is_active: true filter
+  - Affected functions: getCompanyDetails (list & single), updateCompanyDetails
+  - Soft-deleted companies now correctly hidden from all retrieval endpoints
+  - Note: Company model has defaultScope filtering by is_active, but findByPk bypasses it in Sequelize
+
 **Known Issues**:
 - React prop warnings in console (pre-existing, not deployment-related - bgColor prop, invalid hook warnings)
 - Bootstrap script uses bulk INSERT for modules (not per-module upsert)
