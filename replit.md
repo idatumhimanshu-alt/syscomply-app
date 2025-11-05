@@ -40,9 +40,18 @@ Preferred communication style: Simple, everyday language.
 - Password: `Admin@123`
 - Company: IDATUM
 
+**Recent Fixes (November 5, 2025)**:
+- ✅ **Module Initialization**: Fixed bootstrap script to ensure modules and permissions exist even when company already initialized
+  - Bootstrap now checks for missing permissions and creates them automatically
+  - System Super Admin role can now access all 11 core modules without manual SQL intervention
+  - Login flow works correctly without 403 errors
+
 **Known Issues**:
-- React prop warnings in console (pre-existing, not deployment-related)
-- Some 403 permission errors for role/company endpoints (pre-existing module permission configuration)
+- React prop warnings in console (pre-existing, not deployment-related - bgColor prop, invalid hook warnings)
+- Bootstrap script uses bulk INSERT for modules (not per-module upsert)
+  - Only inserts modules when Module table is completely empty
+  - Doesn't handle partial module data (e.g., if only some modules are missing)
+  - Future improvement: Replace with per-module upsert logic for true idempotence
 
 ## System Architecture
 
