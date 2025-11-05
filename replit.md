@@ -1,332 +1,61 @@
-# Quality Management System (QMS)
+# SysComply: Multi-Tenant Compliance Management Platform
 
 ## Overview
 
-This is a comprehensive Quality Management System built with a modern tech stack. The application supports multi-tenant companies with role-based access control, task management, document handling, audit trails, and real-time notifications. It's designed for ISO compliance workflows (ISO 9001, ISO 27001) with features for managing tasks, iterations, departments, and extensive permission controls.
-
-The system uses a monorepo-like structure with separate backend and frontend applications that communicate via REST API and WebSocket connections.
+SysComply is a web-based, multi-tenant compliance management platform designed to replace manual audit workflows with a structured, hierarchical system. It targets businesses preparing for ISO 27001, ISO 9001, and SOC 2 audits by providing a central command center for compliance activities. Key capabilities include automating accountability with live dashboards, ensuring ironclad audit trails with comprehensive logging, offering a secure version-controlled document repository, and providing instant reports and visual analytics for compliance status. The platform supports two user types: QMS Super Admins (for platform onboarding and management) and Client Company Admins (for independent compliance program management within their respective organizations).
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
 
-## Replit Deployment
-
-**Status**: ✅ Successfully deployed and running on Replit (November 2025)
-
-**Changes Made for Replit Compatibility**:
-1. **Database Migration**: Migrated from MySQL to PostgreSQL (Neon-backed)
-   - All Sequelize models updated for PostgreSQL compatibility
-   - Connection via `DATABASE_URL` environment variable
-
-2. **MUI Version Fix**: Downgraded Material UI from v7.3.4 to v6.4.4
-   - Frontend code uses Grid2 component only available in MUI v6
-   - Installed: `@mui/material@6.4.4`, `@mui/icons-material@6.4.4`
-   - Data Grid: `@mui/x-data-grid@7.23.2`
-
-3. **Dependency Management**: 
-   - Created symlink: `frontend-new/node_modules` → `../node_modules`
-   - Frontend dependencies installed in root node_modules
-   - Both frontend and backend share the same dependency tree
-
-4. **Application Wrapper**: Created `server/index.ts`
-   - Orchestrates startup of both backend and frontend
-   - Frontend (Vite) runs on port 3000
-   - Backend (Express) runs on port 5000
-   - Started via: `npm run dev` (runs `tsx server/index.ts`)
-
-**Default Credentials**:
-- Email: `admin@idatum.com`
-- Password: `Admin@123`
-- Company: IDATUM
-
-**Recent Fixes (November 5, 2025)**:
-- ✅ **Module Initialization**: Fixed bootstrap script to ensure modules and permissions exist even when company already initialized
-  - Bootstrap now checks for missing permissions and creates them automatically
-  - System Super Admin role can now access all 11 core modules without manual SQL intervention
-  - Login flow works correctly without 403 errors
-
-- ✅ **Company Soft Delete Bug**: Fixed company retrieval to properly respect soft-delete flag
-  - Changed all Company.findByPk() calls to Company.findOne() with explicit is_active: true filter
-  - Affected functions: getCompanyDetails (list & single), updateCompanyDetails
-  - Soft-deleted companies now correctly hidden from all retrieval endpoints
-  - Note: Company model has defaultScope filtering by is_active, but findByPk bypasses it in Sequelize
-
-**Known Issues**:
-- React prop warnings in console (pre-existing, not deployment-related - bgColor prop, invalid hook warnings)
-- Bootstrap script uses bulk INSERT for modules (not per-module upsert)
-  - Only inserts modules when Module table is completely empty
-  - Doesn't handle partial module data (e.g., if only some modules are missing)
-  - Future improvement: Replace with per-module upsert logic for true idempotence
-
 ## System Architecture
 
 ### Application Structure
 
-**Backend (BackEnd/)**
-- **Framework**: Express.js with ES modules
-- **ORM**: Sequelize for database abstraction
-- **Entry Point**: `BackEnd/src/server.js` - bootstraps the application, registers routes, initializes Socket.IO, and performs database sync
-- **Database Strategy**: Uses `sequelize.sync({ alter: true })` instead of migrations - schema changes are applied automatically on startup
-- **Port**: Defaults to 5000 (configurable via `PORT` env var)
-
-**Frontend (frontend-new/)**
-- **Framework**: React 19 with Vite bundler
-- **UI Library**: Material UI v6 (MUI) following Material Design principles
-- **Port**: Defaults to 3000
-- **Design System**: Material Design with enterprise dashboard aesthetic, Roboto typography, 8px spacing system
-
-**Hybrid Client (client/)**
-- **Framework**: React with TypeScript, Vite, and shadcn/ui components
-- **UI Approach**: Radix UI primitives with Tailwind CSS styling
-- **Routing**: wouter for client-side routing
-- **State Management**: TanStack Query for server state
+The system employs a monorepo-like structure with distinct backend and frontend applications.
+- **Backend (BackEnd/)**: Built with Express.js (ES modules) and Sequelize ORM for PostgreSQL. It handles API requests, database interactions, and real-time communication via Socket.IO. Schema changes are applied automatically on startup using `sequelize.sync({ alter: true })`.
+- **Frontend (frontend-new/)**: A React 19 application using Vite and Material UI v6 (MUI) for a Material Design-compliant enterprise dashboard aesthetic.
+- **Hybrid Client (client/)**: An alternative React/TypeScript client utilizing Vite, shadcn/ui components (Radix UI primitives with Tailwind CSS), wouter for routing, and TanStack Query for state management.
 
 ### Data Layer
 
-**Database**
-- **Primary**: PostgreSQL (originally MySQL, migrated for Replit compatibility)
-- **Connection**: Configured via `DATABASE_URL` environment variable or individual DB_* vars
-- **Models** (Sequelize):
-  - `Company` - Multi-tenant company entities with soft delete support
-  - `User` - User accounts with bcrypt password hashing, self-referential reporting hierarchy
-  - `Role` - Hierarchical role definitions with parent-child relationships
-  - `Module` - Feature/module registry used for permissions
-  - `RoleModulePermission` - Junction table mapping roles to module-level permissions (read/write/delete)
-  - `Task` - Core business tasks with status, priority, compliance tracking
-  - `TaskAssignment` - Many-to-many assignments with automatic manager inclusion
-  - `TaskChangeLog` - Audit trail for task modifications
-  - `Department` - Organizational departments per company
-  - `Iteration` - Time-boxed task cycles/sprints
-  - `Document` - File metadata for task attachments
-  - `GeneralDocument` & `GeneralDocumentFolder` - Hierarchical document management with visibility scopes
-  - `Comment` - Task comments
-  - `Notification` - In-app notifications with seen/unseen status
-
-**Bootstrapping**
-- On first run: `bootstrapSystemSuperAdmin.js` creates default company, system super admin role, modules, and admin user
-- Modules are inserted with UUIDs that frontend uses for permission-gated routes
-- Email notifications sent to new users with auto-generated passwords
+- **Database**: PostgreSQL is the primary database (migrated from MySQL for Replit compatibility). Connection is configured via `DATABASE_URL`.
+- **Models**: Key Sequelize models include `Company` (multi-tenant with soft delete), `User` (with reporting hierarchy), `Role` (hierarchical), `Module` (feature registry), `RoleModulePermission` (granular permissions), `Task`, `Department`, `Iteration`, `Document`, `GeneralDocument`, `Comment`, and `Notification`.
+- **Bootstrapping**: An initial script (`bootstrapSystemSuperAdmin.js`) sets up the default company, system super admin, modules, and an admin user.
 
 ### Authentication & Authorization
 
-**Authentication**
-- JWT-based authentication with tokens issued on login
-- Tokens include: `userId`, `role` (UUID), `company` (UUID), `email`, `name`
-- Secret key: `JWT_SECRET` environment variable
-- Middleware: `authMiddlewares.js` - validates Bearer tokens and attaches decoded user to `req.user`
-
-**Authorization**
-- Role-based with module-level granular permissions
-- Permissions stored in `RoleModulePermission` with flags: `can_read`, `can_write`, `can_delete`
-- Middleware: `permissionsMiddlewares.js` - expects `moduleId` as first route param (e.g., `/:moduleId/tasks`)
-- Routes validate UUID-length moduleId and check user's role permissions before allowing access
-- Hierarchical roles: roles can have parent roles, permissions cascade through hierarchy
-
-**Special Role**: System Super Admin
-- Company-agnostic super user
-- Can manage multiple companies
-- Must provide `company_id` in requests for company-specific operations
-- Cannot be manually created (only via bootstrap)
+- **Authentication**: JWT-based, with tokens containing `userId`, `role`, `company`, `email`, and `name`. Middleware validates tokens and attaches user data.
+- **Authorization**: Role-based with granular, module-level permissions (`can_read`, `can_write`, `can_delete`) stored in `RoleModulePermission`. Permissions cascade through hierarchical roles. A special System Super Admin role manages multiple companies. Middleware enforces permissions by checking the `moduleId` in routes.
 
 ### API Architecture
 
-**REST Endpoints** (mounted under `/api/*`)
-- `/api/auth` - Login, registration, token management
-- `/api/companies` - Company CRUD and onboarding
-- `/api/users` - User management with auto-generated passwords
-- `/api/roles` - Role hierarchy and CRUD
-- `/api/modules` - Module registry
-- `/api/role-module-permissions` - Permission assignments
-- `/api/tasks` - Task CRUD with bulk operations and Excel import/export
-- `/api/task-assignments` - Assignment management with hierarchy-aware assignment
-- `/api/task-changelogs` - Audit trail retrieval
-- `/api/departments` - Department management
-- `/api/iterations` - Iteration/sprint management
-- `/api/documents` - File upload/download with metadata
-- `/api/general-documents` - Hierarchical document folders and files with visibility scopes
-- `/api/comments` - Task comments
-- `/api/notifications` - Real-time notification delivery
-
-**File Uploads**
-- Uses `multer` middleware for multipart form handling
-- Storage: `uploads/documents/` directory
-- Files served via static middleware: `/api/uploads`
-- Unique filenames: timestamp + random hash + original extension
-
-**Standard Route Pattern**
-```
-/:moduleId/resource-action
-```
-Where `moduleId` is a UUID from the Module table, used for permission checks.
-
-### Real-Time Communication
-
-**Socket.IO**
-- Initialized in `config/socket.js` and attached to HTTP server
-- CORS configured for frontend origins (localhost:3000, production domains)
-- **Events**:
-  - `join` - Users join room by their user ID
-  - Notifications emitted to specific user rooms on task changes
-- **Use Cases**: 
-  - Real-time notifications for task assignments, status changes, priority updates
-  - Document uploads trigger notifications to relevant users
-  - Change logs create notifications for assigned users and their managers
-
-**Notification Flow**
-1. Task change occurs (status, priority, assignment, document upload)
-2. `TaskChangeLog` entry created
-3. Affected users identified (assignees + their reporting hierarchy)
-4. `Notification` records created in database
-5. Socket.IO emits notification to each user's room
-6. Frontend displays toast/badge updates
+- **REST Endpoints**: Mounted under `/api/*`, covering authentication, company/user/role management, tasks, documents, notifications, and more. A standard route pattern is `/:moduleId/resource-action` for permission checks.
+- **File Uploads**: Uses `multer` for handling multipart forms, storing files locally in `uploads/documents/`, and serving them statically.
+- **Real-Time Communication**: Socket.IO is integrated for real-time notifications for task assignments, status changes, document uploads, and other relevant updates. Notifications are stored in the database and emitted to specific user rooms.
 
 ### Business Logic Patterns
 
-**Task Assignment Hierarchy**
-- When assigning tasks, system automatically includes all managers up the reporting chain
-- Uses recursive `getAllReportToUsers()` utility to traverse `User.reportTo` hierarchy
-- Ensures visibility for all supervisors without manual inclusion
-
-**Audit Trails**
-- Every task modification logged in `TaskChangeLog`
-- Tracks: status, priority, assignments, document uploads, task edits
-- Change logs include user details and timestamp
-- Assignment changes store full user objects (id, name, email) for historical context
-
-**Soft Deletes**
-- Companies use `is_active` flag
-- Users use `is_active` flag
-- GeneralDocuments and Folders use Sequelize paranoid mode (`deleted_at` timestamp)
-- Allows data recovery and maintains referential integrity
-
-**Permission Enforcement**
-- Routes check both authentication (valid token) and authorization (module permissions)
-- Permission checks cascade: write permission implies read, delete implies write
-- Module IDs are validated as UUIDs (length >= 36 characters)
-
-**Multi-Tenancy**
-- Data isolation by `company_id` foreign key
-- System Super Admin can cross company boundaries with explicit `company_id` parameter
-- Regular users restricted to their assigned company
+- **Task Assignment Hierarchy**: Tasks automatically include managers up the reporting chain for visibility.
+- **Audit Trails**: All task modifications are logged in `TaskChangeLog`, recording user, timestamp, and changes.
+- **Soft Deletes**: Companies, Users, and General Documents/Folders utilize soft deletion (`is_active` flags or `deleted_at` timestamps) for data retention and integrity.
+- **Permission Enforcement**: Routes strictly check both authentication and module-level authorization.
+- **Multi-Tenancy**: Data isolation is enforced using `company_id` foreign keys, with System Super Admins able to cross boundaries with explicit `company_id` parameters.
 
 ### Environment Configuration
 
-**Required Backend Variables**
-```
-DATABASE_URL=postgresql://...
-JWT_SECRET=secret_key_here
-BOOTSTRAP_ON_SYNC=true
-MAIL_HOST=smtp.example.com
-MAIL_PORT=587
-MAIL_USER=noreply@example.com
-MAIL_PASS=password
-```
-
-**Required Frontend Variables**
-```
-VITE_BASE_API_URL=http://localhost:5000/api
-```
-
-### Development Workflow
-
-**Backend Development**
-```bash
-cd BackEnd
-npm install
-npm run dev  # Uses --watch flag for auto-restart
-```
-
-**Frontend Development**
-```bash
-cd frontend-new
-npm install
-npm run dev  # Vite dev server on port 3000
-```
-
-**Combined Runner** (Replit-specific)
-- `qms-runner.js` - Installs deps and runs both services concurrently
-- `server/index.ts` - Wrapper that spawns backend as child process
-
-**Database Schema Updates**
-- Currently uses `sync({ alter: true })` - NOT recommended for production
-- Future: migrate to Sequelize migrations or Umzug for version-controlled schema changes
-- Avoid large schema changes without proper migration strategy
+Key environment variables are required for database connection (`DATABASE_URL`), JWT secret (`JWT_SECRET`), email service (`MAIL_*`), and API URLs (`VITE_BASE_API_URL`).
 
 ## External Dependencies
 
 ### Third-Party Services
 
-**Email Service (Nodemailer)**
-- Used for: User account creation notifications, password delivery
-- Configuration: SMTP credentials in environment variables
-- Purpose: Sends auto-generated passwords to new users
-
-**Database**
-- PostgreSQL (via Neon on Replit, or standard Postgres elsewhere)
-- Connection pooling handled by Sequelize
-- SSL optional based on environment
+- **Email Service**: Nodemailer is used for sending user account creation notifications and temporary passwords, configured via SMTP environment variables.
+- **Database**: PostgreSQL, specifically Neon for Replit deployment, or standard PostgreSQL.
 
 ### NPM Packages
 
-**Backend Core**
-- `express` - Web framework
-- `sequelize` - ORM for PostgreSQL
-- `pg`, `pg-hstore` - PostgreSQL drivers
-- `bcryptjs` - Password hashing
-- `jsonwebtoken` - JWT token generation/validation
-- `socket.io` - WebSocket server
-- `cors` - Cross-origin resource sharing
-- `multer` - File upload handling
-- `dotenv` - Environment variable management
-
-**Backend Utilities**
-- `uuid` - UUID generation
-- `nodemailer` - Email sending
-- `exceljs` - Excel file import/export for tasks
-- `date-fns` - Date manipulation
-
-**Frontend Core**
-- `react`, `react-dom` - React framework
-- `react-router-dom` - Client-side routing
-- `@mui/material`, `@mui/icons-material` - Material UI components
-- `@emotion/react`, `@emotion/styled` - CSS-in-JS styling
-- `@tanstack/react-query` - Server state management
-- `axios` - HTTP client
-- `socket.io-client` - WebSocket client
-
-**Frontend Utilities**
-- `jwt-decode` - Token parsing
-- `react-toastify` - Toast notifications
-- `recharts` - Data visualization
-- `xlsx` - Excel file handling
-- `html2canvas`, `jspdf` - PDF generation
-- `date-fns` - Date formatting
-
-**Development Tools**
-- `vite` - Build tool and dev server
-- `eslint` - Code linting
-- `concurrently` - Run multiple processes
-
-**Radix UI Components** (shadcn/ui pattern)
-- Complete set of accessible component primitives
-- Styled with Tailwind CSS and class-variance-authority
-- Used in hybrid client build
-
-### Build & Deployment
-
-**Production Build**
-```bash
-# Frontend
-cd frontend-new && npm run build
-
-# Backend (no build step, runs directly)
-cd BackEnd && npm start
-```
-
-**Deployment Considerations**
-- Static files: Frontend build outputs to dist/
-- Backend serves frontend in production via static middleware
-- Environment variables must be set in production environment
-- Database migrations needed before switching from sync strategy
-- File uploads directory must be writable and backed up
+- **Backend**: `express`, `sequelize`, `pg`, `bcryptjs`, `jsonwebtoken`, `socket.io`, `cors`, `multer`, `dotenv`, `uuid`, `nodemailer`, `exceljs`, `date-fns`.
+- **Frontend**: `react`, `react-dom`, `react-router-dom`, `@mui/material`, `@mui/icons-material`, `@emotion/react`, `@emotion/styled`, `@tanstack/react-query`, `axios`, `socket.io-client`, `jwt-decode`, `react-toastify`, `recharts`, `xlsx`, `html2canvas`, `jspdf`, `date-fns`.
+- **Hybrid Client**: Radix UI primitives and Tailwind CSS are used within shadcn/ui components.
+- **Development Tools**: `vite`, `eslint`, `concurrently`.
