@@ -1,0 +1,22 @@
+{
+  "name": "syscomply-test-automation",
+  "version": "1.0.0",
+  "description": "Automated testing suite for SysComply",
+  "type": "module",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:session1": "playwright test tests/session-1-qms-admin.spec.js",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report playwright-report"
+  },
+  "keywords": ["testing", "playwright", "syscomply"],
+  "author": "SysComply Team",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
