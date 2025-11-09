@@ -1,24 +1,17 @@
+export const defaultCompanyName = 'IDATUM';
 
 import sequelize from '../config/db.js';
-
 import Company from '../models/Company.js';
 import Role from '../models/Role.js';
 import User from '../models/User.js';
 import Module from '../models/Module.js';
-import RoleModulePermission from '../models/RoleModulesPermissions.js';
-import generateRandomPassword from '../utils/generateRandomPassword.js';
-import sendEmail from './sendEmail.js'; // Make sure this exists
-import bcrypt from 'bcryptjs';
-
-// Configuration with fixed credentials
-export const defaultCompanyName = 'IDATUM';
-const defaultAdminEmail = 'admin@idatum.com';
-const defaultAdminName = 'System Admin';
-const defaultAdminPassword = 'Admin@123'; // Fixed password
+import Role_Module_Permissions from '../models/RoleModulesPermissions.js';
+import bcrypt from 'bcryptjs'; // CORRECTED: Changed from 'bcrypt' to 'bcryptjs'
+import { v4 as uuidv4 } from 'uuid';
 
 const bootstrapSystemSuperAdmin = async () => {
     try {
-        // Step 1: Always ensure modules exist (idempotent)
+        // Step 1: ADDED - Ensure modules exist (idempotent)
         const existingModules = await Module.findAll();
 
         if (existingModules.length === 0) {
@@ -41,118 +34,69 @@ const bootstrapSystemSuperAdmin = async () => {
             console.log('ℹ️ Modules already present. Skipping insert.');
         }
 
-        // Step 2: Check if company and System Super Admin already exist
-        const existingCompany = await Company.findOne({ where: { name: defaultCompanyName } });
-        
-        if (existingCompany) {
-            console.log('ℹ️ Default company already exists.');
-            
-            // Ensure System Super Admin role exists
-            let superAdminRole = await Role.findOne({ 
-                where: { 
-                    name: 'System Super Admin',
-                    company_id: existingCompany.id 
-                } 
+        // Step 2: Ensure IDATUM company exists
+        let company = await Company.findOne({ where: { name: 'IDATUM' } });
+        if (!company) {
+            company = await Company.create({
+                id: uuidv4(),
+                name: 'IDATUM',
+                industry: 'Software',
+                domain: 'idatum.com',
+                is_active: true
             });
-            
-            if (!superAdminRole) {
-                console.log('⚠️ System Super Admin role missing, creating it now...');
-                superAdminRole = await Role.create({
-                    name: 'System Super Admin',
-                    company_id: existingCompany.id,
-                });
-            }
-            
-            // Step 3: Ensure permissions exist for System Super Admin
-            const modules = await Module.findAll();
-            for (const module of modules) {
-                const existingPermission = await RoleModulePermission.findOne({
-                    where: {
-                        role_id: superAdminRole.id,
-                        module_id: module.id
-                    }
-                });
-                
-                if (!existingPermission) {
-                    await RoleModulePermission.create({
-                        role_id: superAdminRole.id,
-                        module_id: module.id,
-                        can_read: true,
-                        can_write: true,
-                        can_delete: true
-                    });
-                    console.log(`✅ Created permission for module: ${module.name}`);
-                }
-            }
-            
-            console.log('✅ System already initialized with all modules and permissions.');
-            return;
+            console.log('✅ Default company created.');
+        } else {
+            console.log('ℹ️ Default company already exists.');
         }
 
-        // Step 4: Create Default Company (first-time setup)
-        const defaultCompany = await Company.create({
-            name: defaultCompanyName,
-            industry: 'Technology',
-            domain: 'Quality Management',
-            is_active: true,
-        });
+        // Step 3: Ensure System Super Admin role exists for this company
+        let role = await Role.findOne({ where: { name: 'System Super Admin', company_id: company.id } });
+        if (!role) {
+            role = await Role.create({
+                id: uuidv4(),
+                name: 'System Super Admin',
+                company_id: company.id
+            });
+            console.log('✅ System Super Admin role created.');
+        } else {
+            console.log('ℹ️ System Super Admin role already exists.');
+        }
 
-        // Step 5: Create System Super Admin Role
-        const superAdminRole = await Role.create({
-            name: 'System Super Admin',
-            company_id: defaultCompany.id,
-        });
+        // Step 4: Ensure the admin user exists
+        let user = await User.findOne({ where: { email: 'admin@idatum.com' } });
+        if (!user) {
+            const password_hash = await bcrypt.hash('Admin@123', 10);
+            user = await User.create({
+                id: uuidv4(),
+                company_id: company.id,
+                email: 'admin@idatum.com',
+                name: 'System Super Admin',
+                role_id: role.id,
+                password_hash: password_hash,
+                is_active: true
+            });
+            console.log('✅ System Super Admin user created successfully.');
+            console.log('Credentials: admin@idatum.com / Admin@123');
+        } else {
+            console.log('ℹ️ System Super Admin user already exists.');
+        }
 
-        // Step 6: Hash the fixed password
-        console.log('System Super Admin Credentials:');
-        console.log(`Email: ${defaultAdminEmail}`);
-        console.log(`Password: ${defaultAdminPassword}`);
-        const hashedPassword = await bcrypt.hash(defaultAdminPassword, 10);
-
-        // Step 7: Create Super Admin User
-        const superAdminUser = await User.create({
-            name: defaultAdminName,
-            email: defaultAdminEmail,
-            company_id: defaultCompany.id,
-            role_id: superAdminRole.id,
-            password_hash: hashedPassword,
-            is_active: true,
-        });
-
-        // Step 8: Assign Full Permissions for All Modules to the Role
+        // Step 5: Grant all permissions to this role
         const modules = await Module.findAll();
-        const permissionPromises = modules.map((module) =>
-            RoleModulePermission.create({
-                role_id: superAdminRole.id,
-                module_id: module.id,
-                can_read: true,
-                can_write: true,
-                can_delete: true
-            })
-        );
-
-        await Promise.all(permissionPromises);
-
-        // Step 9: Send Email with Login Credentials
-        const subject = 'Welcome - System Super Admin Account Created';
-        const message = `
-Hello ${superAdminUser.name},
-
-Your System Super Admin account has been created successfully.
-
-Login Credentials:
-Email: ${superAdminUser.email}
-Password: ${defaultAdminPassword}
-
-Please log in and change your password if needed.
-
-Regards,
-System Setup Team
-`;
-
-        await sendEmail(superAdminUser.email, subject, message);
-
-        console.log('✅ System Super Admin setup complete.');
+        for (const module of modules) {
+            await Role_Module_Permissions.findOrCreate({
+                where: {
+                    role_id: role.id,
+                    module_id: module.id
+                },
+                defaults: {
+                    can_read: true,
+                    can_write: true,
+                    can_delete: true
+                }
+            });
+        }
+        console.log('✅ System Super Admin permissions synced.');
 
     } catch (error) {
         console.error('❌ Error during system bootstrap:', error);

@@ -8,7 +8,15 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
-	allowedHosts: ['ec2-13-233-161-146.ap-south-1.compute.amazonaws.com']
+    allowedHosts: ['ec2-13-233-161-146.ap-south-1.compute.amazonaws.com'],
+    proxy: {
+      // Proxy all requests starting with /api to the backend
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   plugins: [react()],
   resolve: {
