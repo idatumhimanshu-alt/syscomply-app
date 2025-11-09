@@ -1,0 +1,239 @@
+TEST SESSION 1: QMS Super Admin - Company Onboarding & Isolation
+
+OBJECTIVE: Validate QMS Super Admin can onboard companies and verify proper data isolation boundaries.
+
+CREDENTIALS:
+- Admin Email: admin@idatum.com
+- Admin Password: Admin@123
+
+TEST DATA NEEDED:
+- Test Email 1: [YOU WILL PROVIDE VIA TAKE OVER]
+- Test Email 2: [YOU WILL PROVIDE VIA TAKE OVER]
+
+---
+
+TEST 1-1: Admin Login & Dashboard Access
+STEPS:
+1. Navigate to login page
+2. Enter email: admin@idatum.com
+3. Enter password: Admin@123
+4. Click "Login" button
+5. Wait for page load
+
+SUCCESS CRITERIA:
+✓ Dashboard loads within 3 seconds
+✓ Greeting displays "Welcome, Admin" or similar
+✓ Navigation menu shows "Organization Onboarding" module
+✓ URL changes to /dashboard or /admin
+
+FAILURE INDICATORS:
+✗ Error message appears
+✗ Stuck on login page
+✗ 403/401 error
+✗ "Organization Onboarding" not visible
+
+---
+
+TEST 1-2: Create First Company - ABC Corp
+STEPS:
+1. From dashboard, click "Organization Onboarding"
+2. Click "Add New Company" or "Create Company" button
+3. Fill company details:
+   - Company Name: ABC Corp
+   - Industry: IT Services
+   - Domain: abc.com
+   - Framework: ISO 27001
+4. Fill Company Admin details:
+   - Name: John Smith
+   - Email: [TAKE OVER - USE TEST EMAIL 1]
+   - Role: Company Admin
+5. Click "Create" or "Submit"
+6. Wait for confirmation
+
+SUCCESS CRITERIA:
+✓ Success message displays: "Company created successfully" or similar
+✓ Modal closes or redirects to companies list
+✓ ABC Corp appears in companies list
+✓ Status shows "Active" or "Pending"
+
+TAKE OVER REQUIRED:
+→ At Step 3 Email field, pause for user to provide test email address
+→ User will type their actual test email
+→ Resume after email entered
+
+---
+
+TEST 1-3: Email Verification - ABC Corp Admin
+STEPS:
+1. Agent pauses, displays message: "CHECK YOUR EMAIL"
+2. User opens email inbox
+3. User confirms email received with subject containing "Welcome" or "Account Created"
+4. User copies password from email
+5. User provides password to Agent
+
+SUCCESS CRITERIA:
+✓ Email received within 2 minutes
+✓ Email contains username/password
+✓ Email from SysComply domain
+✓ Login link present
+
+USER ACTION REQUIRED:
+→ Agent displays: "Please check Test Email 1 inbox and provide the password"
+→ User pastes password into Agent chat
+→ Agent records password for next session
+
+DOCUMENT:
+- Test Email 1: [user provided]
+- ABC Admin Password: [from email]
+
+---
+
+TEST 1-4: Verify ABC Corp in Companies List
+STEPS:
+1. From dashboard, navigate to "Companies" or "Organization List"
+2. Locate "ABC Corp" in table/grid
+3. Click on ABC Corp row to view details
+
+SUCCESS CRITERIA:
+✓ ABC Corp visible in active companies list
+✓ Company details show:
+  - Industry: IT Services
+  - Domain: abc.com
+  - Framework: ISO 27001
+  - Admin: John Smith
+  - Status: Active
+✓ Creation date is today
+✓ Company ID visible
+
+---
+
+TEST 1-5: Create Second Company - XYZ Manufacturing
+STEPS:
+1. Click "Add New Company" button
+2. Fill company details:
+   - Company Name: XYZ Manufacturing
+   - Industry: Manufacturing
+   - Domain: xyz.com
+   - Framework: ISO 9001
+3. Fill Company Admin details:
+   - Name: Sarah Johnson
+   - Email: [TAKE OVER - USE TEST EMAIL 2]
+   - Role: Company Admin
+4. Click "Create"
+5. Wait for confirmation
+
+SUCCESS CRITERIA:
+✓ Success message displays
+✓ XYZ Manufacturing appears in list
+✓ Both ABC Corp AND XYZ Manufacturing visible
+✓ Two separate company entries
+
+TAKE OVER REQUIRED:
+→ At Step 3 Email field, pause
+→ User provides second test email
+→ Resume after email entered
+
+---
+
+TEST 1-6: Email Verification - XYZ Admin
+STEPS:
+1. Agent pauses for user email check
+2. User confirms email to Test Email 2
+3. User provides credentials
+
+SUCCESS CRITERIA:
+✓ Email received for sarah@xyz.com (or Test Email 2)
+✓ Separate credentials from ABC Corp
+✓ Different password than ABC Corp admin
+
+DOCUMENT:
+- Test Email 2: [user provided]
+- XYZ Admin Password: [from email]
+
+---
+
+TEST 1-7: Data Isolation - QMS to Client Access Block
+STEPS:
+1. While logged in as QMS Super Admin
+2. Look for any tasks, documents, or iteration data in navigation
+3. Attempt to access "Tasks" or "Documents" modules if visible
+4. Verify admin account CANNOT see client company data
+
+SUCCESS CRITERIA:
+✓ No tasks from ABC Corp visible in admin dashboard
+✓ No documents from ABC Corp visible
+✓ Admin dashboard shows only company management features
+✓ No client-specific modules accessible
+
+FAILURE INDICATORS:
+✗ Can see ABC Corp task list
+✗ Can access ABC Corp documents
+✗ Can view ABC Corp iterations
+→ If any client data visible, TEST FAILS - this is CRITICAL security issue
+
+---
+
+TEST 1-8: Module Access Verification
+STEPS:
+1. From admin dashboard, view navigation menu
+2. Count accessible modules
+3. Verify presence of core modules
+
+SUCCESS CRITERIA:
+✓ "Organization Onboarding" module present
+✓ "Companies" or "Company Management" present
+✓ "Settings" or "Platform Configuration" present
+✓ At least 8-10 admin modules visible
+✓ NO client-specific modules (Tasks, Iterations, Documents for specific companies)
+
+---
+
+TEST 1-9: Platform Configuration Access
+STEPS:
+1. Navigate to Settings → Modules or Platform Settings
+2. View module configuration options
+3. Verify configuration controls load
+
+SUCCESS CRITERIA:
+✓ Settings page loads
+✓ Module toggle options visible
+✓ Configuration saves successfully
+✓ No errors on settings page
+
+---
+
+TEST 1-10: Logout & JWT Invalidation
+STEPS:
+1. Click profile icon or user menu
+2. Click "Logout" button
+3. Confirm logout
+4. Attempt to navigate back to /dashboard using browser back button
+
+SUCCESS CRITERIA:
+✓ Successfully logged out
+✓ Redirected to login page
+✓ Dashboard URL access blocked (redirects to login)
+✓ "Session expired" or "Please login" message if accessing protected route
+✓ Login page displays again
+
+FAILURE INDICATORS:
+✗ Can access dashboard after logout
+✗ Browser back button shows dashboard data
+→ This indicates JWT not invalidated - SECURITY ISSUE
+
+---
+
+SESSION 1 COMPLETION:
+After Test 1-10, Agent should output:
+
+RESULTS SUMMARY:
+- Tests Passed: X/10
+- Tests Failed: X/10
+- Critical Issues: [list any data isolation or JWT failures]
+
+CREDENTIALS COLLECTED:
+- ABC Corp Admin: [email] / [password]
+- XYZ Manufacturing Admin: [email] / [password]
+
+NEXT STEPS:
+→ Proceed to Session 2 using ABC Corp credentials
